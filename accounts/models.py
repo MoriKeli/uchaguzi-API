@@ -33,3 +33,27 @@ class User(AbstractUser):
         ordering = ['username']
         verbose_name_plural = 'Users'
 
+
+class UserVotingStation(models.Model):
+    """
+        This model stores info. of a given voter. Its details entail where a given voter will cast his/her vote.
+        For example, if a voter is to vote in Nairobi County, Embakasi Constituency, Kayole East ward then s/he cannot
+        vote for other nominated aspirants in Kisumu or Mombasa. He/she can only vote for Nairobi aspirants. 
+    """
+    id = models.CharField(max_length=25, primary_key=True, unique=True, editable=False)
+    voter = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
+    county = models.CharField(max_length=50, blank=False)
+    constituency = models.CharField(max_length=70, blank=False)
+    ward = models.CharField(max_length=70, blank=False)
+    is_registered = models.BooleanField(default=False, editable=False, blank=False)
+    registered = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Voting Stations'
+        ordering = ['county', 'constituency']
+
+    def __str__(self):
+        return self.voter.username
+
+    
