@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, UserVotingStation
 
 class SignupSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     username = serializers.CharField(required=True)
-    
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'gender', 'phone_no', 'national_id', 'password']
@@ -24,3 +24,9 @@ class SignupSerializer(serializers.ModelSerializer):
         
         return instance
 
+
+class VoterRegistrationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserVotingStation
+        fields = '__all__'
