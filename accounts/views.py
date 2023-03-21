@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .serializers import SignupSerializer, VoterRegistrationSerializer
 from datetime import datetime, timedelta
 import jwt
@@ -44,10 +46,12 @@ class SignupView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class VoterRegistrationView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
-        serializer = VoterRegistrationSerializer(data=request.data, instance=request.user)
+        serializer = VoterRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(is_voter=True)
+        serializer.save(voter=request.user, is_registered=True)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
