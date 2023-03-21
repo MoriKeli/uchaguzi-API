@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from PIL import Image
 
 class User(AbstractUser):
     """"
@@ -33,6 +34,20 @@ class User(AbstractUser):
         ordering = ['username']
         verbose_name_plural = 'Users'
 
+    def __str__(self):
+        return self.username
+
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+
+        dp = Image.open(self.profile_pic.path)
+
+        # resize using Python Image Library (PIL) profile picture if it exceeds 500x500 pixels
+        if dp.height > 500 and dp.width > 500:
+            output_size = (500, 500)
+            dp.thumbnail(output_size)
+            dp.save(self.profile_pic.path)
+    
 
 class VotingStation(models.Model):
     """
