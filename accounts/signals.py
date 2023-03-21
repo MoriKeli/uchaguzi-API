@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from datetime import datetime
-from .models import User
+from .models import User, UserVotingStation
 import uuid
 
 @receiver(pre_save, sender=User)
@@ -28,4 +28,10 @@ def generate_userID(sender, instance, **kwargs):
     
     except AttributeError:
         return
+
+
+@receiver(pre_save, sender=UserVotingStation)
+def generate_votingstationID(sender, instance, **kwargs):
+    if instance.id == "":
+        instance.id = str(uuid.uuid4()).upper().replace('-', '')[:25]
 
