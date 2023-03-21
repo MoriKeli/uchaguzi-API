@@ -34,7 +34,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Users'
 
 
-class UserVotingStation(models.Model):
+class VotingStation(models.Model):
     """
         This model stores info. of a given voter. Its details entail where a given voter will cast his/her vote.
         For example, if a voter is to vote in Nairobi County, Embakasi Constituency, Kayole East ward then s/he cannot
