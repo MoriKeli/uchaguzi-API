@@ -3,7 +3,7 @@ from django.db import models
 from PIL import Image
 
 class User(AbstractUser):
-    """"
+    """
         This is the User model that will be used by the API as the default user model. The model contains user's profile i.e. voters and officials.
         There are two boolean fields to check distinguish users:
             - is_voter: returns True if a user is a registered voter else False
