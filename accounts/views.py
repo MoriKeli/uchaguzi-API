@@ -59,3 +59,11 @@ class VoterRegistrationView(APIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class LogoutUser(APIView):
+    def post(self, request):
+        response = Response()
+        response.delete_cookie('jwt')
+        response.data = {"message": "User logged out ..."}
+        
+        return response
+
