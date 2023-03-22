@@ -30,19 +30,90 @@ class Aspirants(models.Model):
     
 class VotingResults(models.Model):
     """" This table stores election results. """
-
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
-    aspirant = models.ForeignKey(Aspirants, on_delete=models.CASCADE, editable=False)   # Name of a given aspirant - person vying for a given electoral seat
+    aspirant = models.ForeignKey(Aspirants, on_delete=models.DO_NOTHING, editable=False)   # Name of a given aspirant - person vying for a given electoral seat
     total_votes = models.PositiveIntegerField(default=0, editable=False)    # Total votes garnered in favor of the stated aspirant
     voter_turnout = models.PositiveIntegerField(default=0, editable=False)      # Total voters who voted in favor of the stated aspirant
-    percentage = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    percentage = models.DecimalField(max_digits=3, decimal_places=2, default=0.0, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = 'Election Results'
+        verbose_name_plural = 'Election results'
         ordering = ['-total_votes']
 
     def __str__(self):
         return self.aspirant
+
+class PollsResults(models.Model):
+    """ This model saves info about poll results just like VotingResults """
+    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
+    aspirant = models.ForeignKey(Aspirants, on_delete=models.DO_NOTHING, editable=False)
+    total_votes = models.PositiveIntegerField(default=0, editable=False)
+    voters_turnout = models.PositiveIntegerField(default=0, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Polls results'
+        ordering = ['total_votes']
+
+    def __str__(self):
+        return self.aspirant
+
+
+class Nominations(models.Model):
+    """ Stores info. about every nominated aspirants in addition to officials who have nominated an aspirant """
+    aspirant = models.ForeignKey(Aspirants, on_delete=models.CASCADE, editable=False)
+    officer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, editable=False)
+    role = models.CharField(max_length=50, blank=False)
+    is_nominated = models.BooleanField(default=False, editable=False)   # returns True if aspirant is nominated else False.
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Nomination details'
+        ordering = []
+
+    def __str__(self):
+        return self.officer_name
+
+
+class Voters(models.Model):
+    """ Stores details of voters who have elected their leaders. """
+    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
+    voter = models.OneToOneField(User, on_delete=models.DO_NOTHING, editable=False)
+    mca = models.BooleanField(default=False, editable=False, db_column='Member of County Assembly')
+    mp = models.BooleanField(default=False, editable=False, db_tablespace='Member of Parliament')
+    women_rep = models.BooleanField(default=False, editable=False, db_tablespace='Women Representative')
+    senator = models.BooleanField(default=False, editable=False)
+    governor = models.BooleanField(default=False, editable=False)
+    president = models.BooleanField(default=False, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Voters Elections Info.'
+        ordering = ['voter']
+
+    def __str__(self):
+        return self.voter
+
+
+class Polled(models.Model):
+    """ Stores details of voters who have participated in polls. """
+    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
+    voter = models.OneToOneField(User, on_delete=models.DO_NOTHING, editable=False)
+    mca = models.BooleanField(default=False, editable=False, db_column='Member of County Assembly')
+    mp = models.BooleanField(default=False, editable=False, db_tablespace='Member of Parliament')
+    women_rep = models.BooleanField(default=False, editable=False, db_tablespace='Women Representative')
+    senator = models.BooleanField(default=False, editable=False)
+    governor = models.BooleanField(default=False, editable=False)
+    president = models.BooleanField(default=False, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Polled'
+        ordering = ['voter']
 
