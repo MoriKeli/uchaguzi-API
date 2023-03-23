@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
 from django.contrib.auth.decorators import user_passes_test
@@ -11,7 +12,7 @@ from .models import Aspirants, VotingResults, PollsResults
 class VieForElectoralPostView(APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    @user_passes_test(lambda user: user.is_voter is True)
+    @user_passes_test(lambda user: user.is_voter is True and user.votingstation.is_registered is True)
     def post(self, request):
         serializer = AspirantsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

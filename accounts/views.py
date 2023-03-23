@@ -52,7 +52,9 @@ class VoterRegistrationView(APIView):
         serializer = VoterRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        if request.user.is_staff is True and request.user.is_official:
+        if request.user.is_staff is True and request.user.is_official is True:
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        elif request.user.is_staff is True and request.user.is_superuser is True:
             return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
         else:
             serializer.save(voter=request.user, is_registered=True)
