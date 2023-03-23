@@ -29,7 +29,7 @@ class Aspirants(models.Model):
         return self.name
     
 class VotingResults(models.Model):
-    """" This table stores election results. """
+    """ This table stores election results. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     aspirant = models.ForeignKey(Aspirants, on_delete=models.DO_NOTHING, editable=False)   # Name of a given aspirant - person vying for a given electoral seat
     total_votes = models.PositiveIntegerField(default=0, editable=False)    # Total votes garnered in favor of the stated aspirant
