@@ -42,7 +42,7 @@ class User(AbstractUser):
 
         dp = Image.open(self.profile_pic.path)
 
-        # resize using Python Image Library (PIL) profile picture if it exceeds 500x500 pixels
+        # resize user's profile picture using Python Image Library (PIL) if it exceeds 500x500 pixels
         if dp.height > 500 and dp.width > 500:
             output_size = (500, 500)
             dp.thumbnail(output_size)
